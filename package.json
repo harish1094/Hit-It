@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage":"https://github.com/harish1094/Hit-It",
+  "homepage":"https://harish1094.github.io/Hit-It/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
