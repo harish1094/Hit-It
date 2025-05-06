@@ -29,8 +29,8 @@
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/hit-it-game.git
-cd hit-it-game
+git clone https://github.com/harish1094/Hit-It.git
+cd Hit-It
 
 # Install dependencies
 npm install
