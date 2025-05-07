@@ -2,7 +2,7 @@
 
 **Hit It!** is a fast-paced, modern browser game built with React, TypeScript, and Vite. Click on as many balls as you can within 10 seconds. Balls spawn rapidly, move randomly, and disappear in 2 seconds. Think fast, click faster!
 
-###### Click [Here](https://harish1094.github.io/Hit-It/) to play!
+###### Click [here](https://harish1094.github.io/Hit-It/) to play!
 
 ![screenshot](./preview.gif)
 
