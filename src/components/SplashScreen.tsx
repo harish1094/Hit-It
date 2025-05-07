@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import MotionBall from "./MotionBall";
 
 type Props = {
   onComplete: () => void;
@@ -45,25 +46,18 @@ const SplashScreen: React.FC<Props> = ({ onComplete }) => {
       >
         One goal. Hit them all.
       </h4>
-      <motion.div
-        animate={{ rotate: 360 }}
-        style={{  width: 30,
-            height: 30,}}
-        transition={{ duration: 2, repeat: Infinity }}
+      <MotionBall />
+      <p
+        style={{
+          fontSize: "1rem",
+          opacity: 0.6,
+          position: "absolute",
+          bottom: 20,
+          fontStyle: "italic",
+        }}
       >
-        <div          
-          style={{
-            position: "absolute",
-            width: 30,
-            height: 30,
-            background: `radial-gradient(circle at 30% 30%,rgb(232, 104, 108), #fecfef)`,
-            borderRadius: "50%",
-            boxShadow: "0 0 10px rgba(255, 255, 255, 0.3)",
-            transition: "top 0.05s linear, left 0.05s linear",
-          }}
-        />
-      </motion.div>
-      <p style={{ fontSize: "1rem", opacity: 0.8 }}>Version 1.0.0</p>
+        Version 1.0.0
+      </p>
     </motion.div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import GameTimer from "./GameTimer";
+import { GameMode } from "../types/common";
 
 type Ball = {
   id: number;
@@ -13,10 +14,16 @@ type Ball = {
 type Props = {
   score: number;
   setScore: (score: number) => void;
-  gameDuration:number
+  gameDuration: number;
+  mode: GameMode;
 };
 
-const Playground: React.FC<Props> = ({ score, setScore ,gameDuration}) => {
+const Playground: React.FC<Props> = ({
+  score,
+  setScore,
+  gameDuration,
+  mode,
+}) => {
   const [balls, setBalls] = useState<Ball[]>([]);
   const nextId = useRef(0);
 
@@ -42,29 +49,32 @@ const Playground: React.FC<Props> = ({ score, setScore ,gameDuration}) => {
       const newBall: Ball = { id, x, y, dx, dy, color };
 
       setBalls((prev) => [...prev, newBall]);
-
-      setTimeout(() => {
-        setBalls((prev) => prev.filter((b) => b.id !== id));
-      }, 2000);
+      if (mode !== GameMode.Easy) {
+        setTimeout(() => {
+          setBalls((prev) => prev.filter((b) => b.id !== id));
+        }, 2000);
+      }
     }, 1000);
 
     return () => clearInterval(spawn);
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
     // Update Position
-    const interval = setInterval(() => {
-      setBalls((prev) =>
-        prev.map((ball) => ({
-          ...ball,
-          x: Math.min(Math.max(ball.x + ball.dx * 2, 0), 95),
-          y: Math.min(Math.max(ball.y + ball.dy * 2, 0), 90),
-        }))
-      );
-    }, 50);
-
+    const interval = setInterval(
+      () => {
+        setBalls((prev) =>
+          prev.map((ball) => ({
+            ...ball,
+            x: Math.min(Math.max(ball.x + ball.dx * 2, 0), 95),
+            y: Math.min(Math.max(ball.y + ball.dy * 2, 0), 90),
+          }))
+        );
+      },
+      mode === GameMode.Hard ? 50 : gameDuration * 2
+    );
     return () => clearInterval(interval);
-  }, []);
+  }, [gameDuration, mode]);
 
   const hitBall = (id: number) => {
     setScore(score + 1);
@@ -112,7 +122,7 @@ const Playground: React.FC<Props> = ({ score, setScore ,gameDuration}) => {
       >
         Score: {score}
       </div>
-      <GameTimer gameDuration={gameDuration}/>
+      <GameTimer gameDuration={gameDuration} />
     </div>
   );
 };

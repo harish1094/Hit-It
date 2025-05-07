@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SplashScreen from "./components/SplashScreen";
 import GameMenu from "./components/GameMenu";
 import Playground from "./components/Playground";
+import { GameMode } from "./types/common";
 
 const gameDuration = 1 * 20 * 1000; //min * sec * ms
 
@@ -10,6 +11,8 @@ const App: React.FC = () => {
   const [started, setStarted] = useState(false);
   const [score, setScore] = useState(0);
   const [firstTry, setFirstTry] = useState(true);
+
+  const [mode, setMode] = useState<GameMode>(GameMode.Hard);
 
   const handleStart = () => {
     setStarted(true);
@@ -42,12 +45,20 @@ const App: React.FC = () => {
       {showSplash ? (
         <SplashScreen onComplete={() => setShowSplash(false)} />
       ) : !started ? (
-        <GameMenu onStart={handleStart} score={score} firstTry={firstTry} gameDuration={gameDuration}/>
+        <GameMenu
+          onStart={handleStart}
+          score={score}
+          firstTry={firstTry}
+          gameDuration={gameDuration}
+          mode={mode}
+          setMode={setMode}
+        />
       ) : (
         <Playground
           score={score}
           setScore={setScore}
           gameDuration={gameDuration}
+          mode={mode}
         />
       )}
     </div>
