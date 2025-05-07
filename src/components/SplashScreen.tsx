@@ -7,8 +7,9 @@ type Props = {
 };
 
 const SplashScreen: React.FC<Props> = ({ onComplete }) => {
+  
   useEffect(() => {
-    const timer = setTimeout(onComplete, 4000);
+    const timer = setTimeout(onComplete, 3000);
     return () => clearTimeout(timer);
   }, [onComplete]);
 

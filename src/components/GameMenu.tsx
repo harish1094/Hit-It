@@ -1,13 +1,14 @@
 import MotionBall from "./MotionBall";
 import type { GameMode } from "../types/common";
+import { useState } from "react";
 
 type Props = {
   onStart: () => void;
   score: number;
   firstTry: boolean;
   gameDuration: number;
-  mode:GameMode,
-  setMode: React.Dispatch<React.SetStateAction<GameMode>>
+  mode: GameMode;
+  setMode: React.Dispatch<React.SetStateAction<GameMode>>;
 };
 
 const GameMenu: React.FC<Props> = ({
@@ -16,13 +17,13 @@ const GameMenu: React.FC<Props> = ({
   firstTry,
   gameDuration,
   mode,
-  setMode
+  setMode,
 }) => {
+  const selectedMode = useState(mode)[0];
 
   const handleModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMode(e.target.value as GameMode);
   };
-  console.log("ssss");
 
   return (
     <div
@@ -61,7 +62,8 @@ const GameMenu: React.FC<Props> = ({
         </div>
       ) : (
         <h2 style={{ fontSize: "2rem" }}>
-          Your Score: <strong>{score}</strong>
+          Your Score: <strong>{score}</strong>{" "}
+          <span>(Mode: {capitalizeFirstLetter(selectedMode)})</span>
         </h2>
       )}
       <div
@@ -69,7 +71,7 @@ const GameMenu: React.FC<Props> = ({
           margin: "2rem 0",
           display: "",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <label
@@ -111,3 +113,8 @@ const GameMenu: React.FC<Props> = ({
 };
 
 export default GameMenu;
+
+function capitalizeFirstLetter(str: string): string {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

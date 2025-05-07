@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import GameTimer from "./GameTimer";
 import { GameMode } from "../types/common";
+import { ballGradients } from "../utils/utils";
 
 type Ball = {
   id: number;
@@ -16,42 +17,41 @@ type Props = {
   setScore: (score: number) => void;
   gameDuration: number;
   mode: GameMode;
+  showWinPopup: () => void;
 };
+
+
 
 const Playground: React.FC<Props> = ({
   score,
   setScore,
   gameDuration,
   mode,
+  showWinPopup,
 }) => {
-  const [balls, setBalls] = useState<Ball[]>([]);
   const nextId = useRef(0);
+  const createBall = () => {
+    const x = Math.random() * 90;
+    const y = Math.random() * 80;
+    const dx = (Math.random() - 0.5) * 2;
+    const dy = (Math.random() - 0.5) * 2;
+    const id = nextId.current++;
+    const color =
+      ballGradients[Math.floor(Math.random() * ballGradients.length)];
+
+    const newBall: Ball = { id, x, y, dx, dy, color };
+    return newBall;
+  };
+
+  const [balls, setBalls] = useState<Ball[]>([createBall()]);
 
   useEffect(() => {
-    const ballGradients = [
-      "radial-gradient(circle at 30% 30%, #ff9a8b, #ff6ec4)",
-      "radial-gradient(circle at 30% 30%, #f6d365, #fda085)",
-      "radial-gradient(circle at 30% 30%, #a18cd1, #fbc2eb)",
-      "radial-gradient(circle at 30% 30%, #fad0c4, #ffd1ff)",
-      "radial-gradient(circle at 30% 30%, #ffecd2, #fcb69f)",
-      "radial-gradient(circle at 30% 30%, #ff9a9e, #fecfef)",
-      "radial-gradient(circle at 30% 30%, #a1c4fd, #c2e9fb)",
-    ];
     const spawn = setInterval(() => {
-      const x = Math.random() * 90;
-      const y = Math.random() * 80;
-      const dx = (Math.random() - 0.5) * 2;
-      const dy = (Math.random() - 0.5) * 2;
-      const id = nextId.current++;
-      const color =
-        ballGradients[Math.floor(Math.random() * ballGradients.length)];
-
-      const newBall: Ball = { id, x, y, dx, dy, color };
-
+      const newBall = createBall();
       setBalls((prev) => [...prev, newBall]);
       if (mode !== GameMode.Easy) {
         setTimeout(() => {
-          setBalls((prev) => prev.filter((b) => b.id !== id));
+          setBalls((prev) => prev.filter((b) => b.id !== newBall.id));
         }, 2000);
       }
     }, 1000);
@@ -77,6 +77,9 @@ const Playground: React.FC<Props> = ({
   }, [gameDuration, mode]);
 
   const hitBall = (id: number) => {
+    if (score + 1 === gameDuration / 1000) {
+      showWinPopup();
+    }
     setScore(score + 1);
     setBalls((prev) => prev.filter((b) => b.id !== id));
   };
@@ -85,7 +88,7 @@ const Playground: React.FC<Props> = ({
     <div
       style={{
         width: "94vw",
-        height: "94vh",
+        height: "92vh",
         position: "relative",
         overflow: "hidden",
         background: "rgba(0, 0, 0, 0.6)",
